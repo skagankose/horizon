@@ -1,3 +1,3 @@
 # Horizoner
 
-Webpage to retrieve, clean and analyze user tweets.
+Webpage to Retrieve, Clean and Analyze User Tweets
