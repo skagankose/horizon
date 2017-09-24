@@ -1,3 +1,3 @@
-# DSWebsite
+# Horizoner
 
-Webpage Project for Istanbul Sehir University, Data Science Laboratory.
+Webpage to retrieve, clean and analyze user tweets.
