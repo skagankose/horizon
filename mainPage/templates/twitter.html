@@ -1,0 +1,213 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block head %}
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script>
+	$(document).ready(function(){
+			$(".individualsClass").addClass("active");
+	});
+	</script>
+
+	<style>
+	.homeBox:hover {
+		color: rgb(115,115,115) !important;
+		border:1px solid rgba(255,255,255,0.3) !important;}
+	.table a {
+		display: block;
+		text-decoration: none;
+		color: black;}
+	.activeCell:hover {
+		background-color: rgba(0,0,0,0.1);
+		cursor: pointer;}
+	.inactiveCell {
+		color: rgba(0,0,0,0.2);}
+	.defaultFont {
+		font-size:17px !important;
+		font-family:verdana !important;}
+	.smallFont {
+		font-size:9px !important;
+		font-family:verdana !important;}
+	.buttonStyle {
+		color:rgb(85,85,85) !important;
+		background-color:#eee !important;
+		border:solid #ccc 1px !important;
+		width:100% !important;
+		font-weight:normal !important;}
+	/*not used*/
+	.flippedImage {
+		-moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: FlipH;
+    -ms-filter: "FlipH";}
+
+	</style>
+
+{% endblock %}
+
+{% block content %}
+
+	<header id="head" class="secondary"></header>
+
+	<!-- container -->
+	<div class="container">
+
+		<div class="row">
+			<article class="col-xs-12 maincontent">
+				<header class="page-header page-title"><a href="/">Home</a> | Twitter</header>
+			</article>
+		</div> <!-- /row -->
+		<br>
+
+		<div class="row">
+			<div class="col-xs-12">
+				<p style="font-size:23px;font-family:verdana;"><b>Twitter Accounts</b></p>
+				<hr>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-xs-12">
+
+				<div id="notLoading">
+					<p class="defaultFont">
+						<div class="input-group margin-bottom-sm">
+						  <span class="input-group-addon"><i class="fa fa-user-o fa-fw"></i></span>
+							<!-- add box -->
+							{% csrf_token %}
+							<input type='text' id='csrftoken' name='csrftoken' value="{{csrf_token}}" hidden='true'/>
+							<input class="form-control" type='text' id='userSearch' name='userSearch' placeholder="Add"/>
+							<button id="buttonSearch" hidden='true'></button>
+						</div>
+					</p>
+
+					<p class="defaultFont">
+						<div class="input-group margin-bottom-sm">
+							<span class="input-group-addon"><i class="fa fa-search fa-fw"></i></span>
+							<!-- search box -->
+							{% csrf_token %}
+							<input type='text' id='csrftoken' name='csrftoken' value="{{csrf_token}}" hidden='true'/>
+							<input class="form-control" type='text' id='userSearchV2' name='userSearch' placeholder="Search"/>
+							<button id="buttonSearchV2" hidden='true'></button>
+						</div>
+					</p>
+
+					<p>
+						<div class="input-group margin-bottom-sm">
+						  <span class="input-group-addon"><i class="fa fa-users fa-fw"></i></span>
+							<!-- search box -->
+							{% csrf_token %}
+							<input type='text' id='csrftoken' name='csrftoken' value="{{csrf_token}}" hidden='true'/>
+							<button id="buttonSearchV3" type="button" class="btn buttonStyle">Add Acounts</button>
+						</div>
+					</p>
+				</div>
+
+				<img id="loading" src="{% static 'images/loading.gif' %}" hidden="true" style="height:140px;">
+				<hr>
+
+			</div>
+		</div>
+
+		<div class="row">
+				<div class="col-xs-12">
+					<div id='results'>
+						<table class="table table-bordered defaultFont">
+							<tbody>
+								{% for account in accounts %}
+									<tr>
+										<td>{{account.pk}}</td>
+										<td class="activeCell">
+											<a href="/account/{{account.screenName}}/">
+												{{account.fullName}}
+											</a>
+										</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+
+						<!-- pagination -->
+						<table class="table table-bordered smallFont" style="text-align:center;">
+						  <tbody>
+						    <tr>
+						    {% if accounts.has_other_pages %}
+						    	{% if accounts.has_previous %}
+						        <td class="activeCell">
+						      		<a href="?page={{ accounts.previous_page_number }}">
+						      			<i class="fa fa-chevron-left" aria-hidden="true"></i>
+						      		</a>
+						        </td>
+						    	{% else %}
+						       <td class="inactiveCell">
+					      			<i class="fa fa-chevron-left" aria-hidden="true"></i>
+						        </td>
+						    	{% endif %}
+
+						      {% for i in accounts.paginator.page_range %}
+						        {% if accounts.number == i %}
+						         <td class="inactiveCell">
+						            <span>{{ i }} <span class="sr-only">(current)</span></span>
+						          </td>
+						        {% else %}
+						          <td class="activeCell">
+						            <a href="?page={{ i }}">{{ i }}</a>
+						          </td>
+						        {% endif %}
+						      {% endfor %}
+
+						    	{% if accounts.has_next %}
+						        <td class="activeCell">
+						      		<a href="?page={{ accounts.next_page_number }}">
+						      			<i class="fa fa-chevron-right" aria-hidden="true"></i>
+						      		</a>
+						        </td>
+						    	{% else %}
+						        <td class="inactiveCell">
+					      			<i class="fa fa-chevron-right" aria-hidden="true"></i>
+						        </td>
+						    	{% endif %}
+						    {% endif %}
+						    </tr>
+						  </tbody>
+						</table> <!-- </pagination> -->
+				</div> <!-- </results> -->
+			</div>
+		</div>
+
+	</div>
+
+	{% endblock %}
+
+	{% block script %}
+
+	<script>
+		$("#userSearch").keyup(function(event){
+		    if(event.keyCode == 13){
+		        $("#buttonSearch").click();
+		    }
+		});
+
+		$("#userSearchV2").keyup(function(event){
+		    if(event.keyCode == 13){
+		        $("#buttonSearchV2").click();
+		    }
+		});
+
+		$(document).ready(function () {
+		    $(document).ajaxStart(function () {
+						$("#notLoading").hide();
+		        $("#loading").show();
+						$("#loadingV2").show();
+		    }).ajaxStop(function () {
+		        $("#loading").hide();
+						$("#loadingV2").hide();
+						$("#notLoading").show();
+		    });
+		});
+	</script>
+
+	{% endblock %}
