@@ -1,0 +1,8 @@
+*.pyc
+*.DS_STORE
+.com.apple.timemachine.donotpresent
+/mainPage/migrations/__pycache__
+/mainPage/migrations/*
+/mainPage/migrations
+/mainPage/__pycache__                 
+/DSWebsite/__pycache__
