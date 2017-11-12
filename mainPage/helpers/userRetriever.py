@@ -132,7 +132,7 @@ def getTweet(userName):
 			# </cleaning>
 
             newTweet.text = text
-            newTweet.cleanedText = cleanedText
+            newTweet.cleanedText = text
             # </block>
 
             newTweet.coordinates = tweet.coordinates
