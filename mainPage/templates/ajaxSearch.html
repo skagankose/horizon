@@ -1,0 +1,66 @@
+
+{% if message %}
+	<div class="alert alert-info" role="alert" style="font-size:15px;font-family:verdana;">
+	    {{message}}
+	</div>
+{% endif %}
+
+<table class="table table-bordered defaultFont">
+	<tbody>
+		{% for account in accounts %}
+			<tr>
+				<td>{{account.pk}}</td>
+				<td class="activeCell">
+					<a href="/account/{{account.screenName}}/">
+						{{account.fullName}}
+					</a>
+				</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+<!-- pagination -->
+<table class="table table-bordered defaultFont" style="text-align:center;">
+	<tbody>
+		<tr>
+		{% if accounts.has_other_pages %}
+			{% if accounts.has_previous %}
+				<td class="activeCell">
+					<a href="?page={{ accounts.previous_page_number }}">
+						<i class="fa fa-chevron-left" aria-hidden="true"></i>
+					</a>
+				</td>
+			{% else %}
+			 <td class="inactiveCell">
+					<i class="fa fa-chevron-left" aria-hidden="true"></i>
+				</td>
+			{% endif %}
+
+			{% for i in accounts.paginator.page_range %}
+				{% if accounts.number == i %}
+				 <td class="inactiveCell">
+						<span>{{ i }} <span class="sr-only">(current)</span></span>
+					</td>
+				{% else %}
+					<td class="activeCell">
+						<a href="?page={{ i }}">{{ i }}</a>
+					</td>
+				{% endif %}
+			{% endfor %}
+
+			{% if accounts.has_next %}
+				<td class="activeCell">
+					<a href="?page={{ accounts.next_page_number }}">
+						<i class="fa fa-chevron-right" aria-hidden="true"></i>
+					</a>
+				</td>
+			{% else %}
+				<td class="inactiveCell">
+					<i class="fa fa-chevron-right" aria-hidden="true"></i>
+				</td>
+			{% endif %}
+		{% endif %}
+		</tr>
+	</tbody>
+</table> <!-- </pagination> -->
